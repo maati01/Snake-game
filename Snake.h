@@ -8,14 +8,16 @@
 
 class Snake {
 public:
-    struct Point{
+    struct Point {
         int x = 0;
         int y = 0;
-    }p[100];
+    } p[100];
 
-    Snake()= default;
-    int getSnakeSize() const{return snakeSize;}
-    void setSnakeSize(int size){snakeSize = size;}
+    Snake() = default;
+
+    int getSnakeSize() const { return snakeSize; }
+
+    void setSnakeSize(int size) { snakeSize = size; }
 
 private:
     int snakeSize = 1;

@@ -12,9 +12,9 @@ int main() {
     gui.createTextures();
     gui.setSpritesParameters();
 
-    while(appWindow.isOpen()){
-        while(appWindow.pollEvent(appEvent)){
-            if(appEvent.type == Event::Closed){
+    while (appWindow.isOpen()) {
+        while (appWindow.pollEvent(appEvent)) {
+            if (appEvent.type == Event::Closed) {
                 appWindow.close();
             }
             gui.checkRefreshButton(appEvent);

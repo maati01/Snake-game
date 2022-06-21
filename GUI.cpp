@@ -14,15 +14,14 @@ void GUI::createTextures() {
 }
 
 void GUI::setSpritesParameters() {
-    orange.setTexture(squareTexture);
+    snakeCell.setTexture(squareTexture);
     refresh.setTexture(refreshTexture);
-    red.setTexture(appleTexture);
-    fondo.setTexture(backgroundTexture);
+    apple.setTexture(appleTexture);
+    background.setTexture(backgroundTexture);
     exit.setTexture(exitTexture);
-    orange.setPosition(0, 0);
-    orange.setColor(sf::Color(255, 120, 0));
-    red.setPosition(1000, 0);
-    red.setColor(sf::Color(255, 0, 36));
+    snakeCell.setPosition(0, 0);
+    snakeCell.setColor(sf::Color(255, 120, 0));
+    apple.setPosition(1000, 0);
 }
 
 tuple<int, int> GUI::getRandomCoords() {
@@ -44,10 +43,8 @@ void GUI::checkRefreshButton(sf::Event appEvent) {
 
         while (good) {
             tie(randomX, randomY) = getRandomCoords();
-            for (int i = 0; i < 9; i++) {
-                if (randomX <= (i + 1) * 50 && randomX > i * 50) randomX = (i + 1) * 50;
-                if (randomY <= (i + 1) * 50 && randomY > i * 50) randomY = (i + 1) * 50;
-            }
+            setCoords();
+
             for (int i = 0; i < snake.getSnakeSize(); i++) {
                 if (randomX != snake.p[i].x || randomY != snake.p[i].y) good = false;
             }
@@ -58,7 +55,7 @@ void GUI::checkRefreshButton(sf::Event appEvent) {
 void GUI::drawState() {
     if (gameIsRunning) {
         refresh.setPosition(1000, 0);
-        window->draw(fondo);
+        window->draw(background);
 
         for (int i = snake.getSnakeSize(); i > 0; i--) {
             snake.p[i].x = snake.p[i - 1].x;
@@ -76,17 +73,15 @@ void GUI::drawState() {
             if (snake.p[0].x == snake.p[i].x && snake.p[0].y == snake.p[i].y) gameIsRunning = false;
         }
 
-        if (snake.p[0].x == red.getPosition().x && snake.p[0].y == red.getPosition().y) {
+        if (snake.p[0].x == apple.getPosition().x && snake.p[0].y == apple.getPosition().y) {
             snake.setSnakeSize(snake.getSnakeSize() + 1);
             if (speed > 100)speed -= 20;
             good = true;
             while (good) {
                 tie(randomX, randomY) = getRandomCoords();
 
-                for (int i = 0; i < 9; i++) {
-                    if (randomX <= (i + 1) * 50 && randomX > i * 50) randomX = (i + 1) * 50;
-                    if (randomY <= (i + 1) * 50 && randomY > i * 50) randomY = (i + 1) * 50;
-                }
+                setCoords();
+
                 for (int i = 0; i < 9; i++) {
                     if (randomX == snake.p[i].x && randomY == snake.p[i].y) {
                         break;
@@ -97,12 +92,12 @@ void GUI::drawState() {
             }
         }
 
-        red.setPosition(randomX, randomY);
-        window->draw(red);
+        apple.setPosition(randomX, randomY);
+        window->draw(apple);
 
         for (int i = 0; i < snake.getSnakeSize(); i++) {
-            orange.setPosition(snake.p[i].x, snake.p[i].y);
-            window->draw(orange);
+            snakeCell.setPosition(snake.p[i].x, snake.p[i].y);
+            window->draw(snakeCell);
         }
         window->display();
         Sleep(speed);
@@ -135,8 +130,8 @@ void GUI::drawFinalState() {
     gameOverText.setPosition(150, 100);
     resultText.setPosition(150, 150);
     refresh.setPosition(150, 220);
-    exit.setPosition(250,220);
-    window->draw(fondo);
+    exit.setPosition(250, 220);
+    window->draw(background);
     window->draw(refresh);
     window->draw(exit);
     window->draw(resultText);
@@ -147,7 +142,20 @@ void GUI::drawFinalState() {
 void GUI::checkExitButton(sf::Event appEvent) {
     sf::Vector2i pos = sf::Mouse::getPosition(*window);
     if (appEvent.type == sf::Event::MouseButtonReleased && exit.getGlobalBounds().contains(pos.x, pos.y) &&
-        !gameIsRunning){
+        !gameIsRunning) {
         window->close();
+    }
+}
+
+GUI::GUI(sf::RenderWindow *window) {
+    this->window = window;
+    tie(randomX, randomY) = getRandomCoords();
+    setCoords();
+}
+
+void GUI::setCoords() {
+    for (int i = 0; i < 9; i++) {
+        if (randomX <= (i + 1) * 50 && randomX > i * 50) randomX = (i + 1) * 50;
+        if (randomY <= (i + 1) * 50 && randomY > i * 50) randomY = (i + 1) * 50;
     }
 }
