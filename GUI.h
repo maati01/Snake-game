@@ -15,13 +15,13 @@ using namespace std;
 class GUI {
 private:
     sf::RenderWindow *window;
-    sf::Sprite orange, refresh, red, fondo;
+    sf::Sprite orange, refresh, red, fondo, exit;
     Snake snake = Snake();
     int good = true;
     int dir = 0, speed = 700;
     bool gameIsRunning = true;
     int randomX{}, randomY{};
-    sf::Texture squareTexture, refreshTexture, backgroundTexture;
+    sf::Texture squareTexture, refreshTexture, backgroundTexture, appleTexture, exitTexture;
 
 public:
     explicit GUI(sf::RenderWindow *window) { this->window = window; }
@@ -29,9 +29,11 @@ public:
     void createTextures();
     void setSpritesParameters();
     void checkRefreshButton(sf::Event appEvent);
+    void checkExitButton(sf::Event appEvent);
     void drawState();
     void setDirection(int dir){this->dir = dir;}
     void handleKeyboard(sf::Event appEvent, GUI gui);
+    void drawFinalState();
     static tuple<int, int> getRandomCoords();
 };
 

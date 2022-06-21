@@ -18,6 +18,7 @@ int main() {
                 appWindow.close();
             }
             gui.checkRefreshButton(appEvent);
+            gui.checkExitButton(appEvent);
             gui.handleKeyboard(appEvent, gui);
         }
         appWindow.clear(Color(26, 28, 36));
